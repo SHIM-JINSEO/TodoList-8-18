@@ -1,0 +1,18 @@
+.grid{
+  max-width: 1000px;
+  display: flex;
+  
+}
+.grid>div{
+  border: 1px solid grey;
+  flex-basis: 0;
+  text-align: center;
+}
+
+.completed,.userId{
+  flex-grow: 1;
+}
+.title{
+  flex-grow: 4;
+  
+}
