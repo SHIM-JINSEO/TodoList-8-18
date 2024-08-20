@@ -1,8 +1,7 @@
 
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'
 import '../App.css';
-import { Link } from 'react-router-dom';
-
 
 function Checkbox({element}){
   const [checked, setChecked] = useState(element.completed);

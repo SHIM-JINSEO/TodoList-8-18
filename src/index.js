@@ -14,12 +14,13 @@ import TodoDetail from './routes/TodoDetail';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <App/>,
     errorElement: <ErrorPage/>,
   },
   {
     path: "/:id",
-    element: <TodoDetail/>
+    element: <TodoDetail/>,
+    errorElement: <ErrorPage/>,
   }
 ]);
 
