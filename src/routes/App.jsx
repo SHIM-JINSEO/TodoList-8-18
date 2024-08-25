@@ -5,39 +5,30 @@ import "../App.css";
 import Search from "./Search.jsx";
 import axios from "axios";
 
-function TodoTable({ todos, checks, setChecks }) {
+function Todo({ element, check, setTodo }) {
   return (
-    <>
-      {todos.map((element) => {
-        return (
-          <div className="grid" key={element.id}>
-            <div className="completed">
-              <input
-                type="checkbox"
-                checked={checks[element.id - 1]}
-                onChange={(event) => {
-                  const newChecks = checks.map((check, index) =>
-                    index === element.id - 1 ? !check : check
-                  );
-                  setChecks(newChecks);
-                }}
-              />
-            </div>
-            <div
-              className="title"
-              style={
-                checks[element.id - 1]
-                  ? { textDecoration: "line-through" }
-                  : { textDecoration: "none" }
-              }
-            >
-              <Link to={`/${element.id}`}>{element.title}</Link>
-            </div>
-            <div className="userId">{element.userId}</div>
-          </div>
-        );
-      })}
-    </>
+    <div className="grid" key={element.id}>
+      <div className="completed">
+        <input
+          type="checkbox"
+          checked={check}
+          onChange={(event) => {
+            setTodo();
+          }}
+        />
+      </div>
+      <div
+        className="title"
+        style={
+          check
+            ? { textDecoration: "line-through" }
+            : { textDecoration: "none" }
+        }
+      >
+        <Link to={`/${element.id}`}>{element.title}</Link>
+      </div>
+      <div className="userId">{element.userId}</div>
+    </div>
   );
 }
 
@@ -45,13 +36,15 @@ function App() {
   const navigate = useNavigate();
   const params = useParams();
   const [todos, setTodos] = useState([]);
-  const [checks, setChecks] = useState([]);
+  /* const [todos, setTodos] = useState([]);
+  const [checks, setChecks] = useState([]); */
   const param = params.userId;
   useEffect(() => {
     axios
       .get("https://jsonplaceholder.typicode.com/todos")
       .then((res) => {
-        console.log(res.data);
+        setTodos(res.data);
+        /* console.log(res.data);
         const jsonOthers = [];
         const jsonCompleted = [];
         res.data.forEach(function (element) {
@@ -60,7 +53,7 @@ function App() {
           jsonCompleted.push(completed);
         });
         setTodos(jsonOthers);
-        setChecks(jsonCompleted);
+        setChecks(jsonCompleted); */
       })
       .catch((err) => {
         console.error("error: ", err);
@@ -88,11 +81,26 @@ function App() {
         <div className="title">TODO</div>
         <div className="userId">USERID</div>
       </div>
-      <TodoTable
-        todos={newTodos}
-        checks={checks}
-        setChecks={setChecks}
-      ></TodoTable>
+      {newTodos.map((element) => {
+        return (
+          <Todo
+            element={element}
+            check={element.completed}
+            setTodo={() => {
+              const copyTodos = todos.map((element2) => {
+                if (element.id === element2.id) {
+                  let { completed, ...rest } = element2;
+                  rest.completed = !completed;
+                  return rest;
+                } else {
+                  return element2;
+                }
+              });
+              setTodos(copyTodos);
+            }}
+          />
+        );
+      })}
     </>
   );
 }
