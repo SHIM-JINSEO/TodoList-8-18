@@ -21,6 +21,10 @@ const router = createBrowserRouter([
     path: "/:id",
     element: <TodoDetail/>,
     errorElement: <ErrorPage/>,
+  },
+  {
+    path: "/userId/:userId",
+    element: <App/>
   }
 ]);
 
