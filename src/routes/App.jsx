@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import "../App.css";
 import Search from "./Search.jsx";
-
+import axios from "axios";
 
 function TodoTable({ todos, checks, setChecks }) {
   return (
@@ -48,18 +48,22 @@ function App() {
   const [checks, setChecks] = useState([]);
   const param = params.userId;
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/todos")
-      .then((response) => response.json())
-      .then((json) => {
+    axios
+      .get("https://jsonplaceholder.typicode.com/todos")
+      .then((res) => {
+        console.log(res.data);
         const jsonOthers = [];
         const jsonCompleted = [];
-        json.forEach(function (element) {
+        res.data.forEach(function (element) {
           let { completed, ...rest } = element;
           jsonOthers.push(rest);
           jsonCompleted.push(completed);
         });
         setTodos(jsonOthers);
         setChecks(jsonCompleted);
+      })
+      .catch((err) => {
+        console.error("error: ", err);
       });
   }, []);
 
